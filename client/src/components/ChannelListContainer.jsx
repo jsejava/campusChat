@@ -3,53 +3,95 @@ import { ChannelList, useChatContext } from "stream-chat-react";
 import Cookies from "universal-cookie";
 
 import { ChannelSearch, TeamChannelList, TeamChannelPreview } from "./";
-// import HospitalIcon from '../assets/hospital.png'
-import shopIcon from "../assets/campusChat/t2.png";
-import payIcon from "../assets/camp/p-5.jpeg";
-import HospitalIcon from "../assets/campusChat/ca1.jpg";
-//import LogoutIcon from "../assets/campusChat/log3.jpeg";
-import LogoutIcon from "../assets/logout.png";
-import connect from "../assets/camp/s3.jpeg";
-//import LogoutIcon from "../assets/logout.png";
+
+import ConnectIcon from "../assets/logo/chat.png";
+import ShopIcon from "../assets/logo/shop.png";
+import ServiceIcon from "../assets/logo/service.png";
+import PayIcon from "../assets/logo/pay-5.png";
+import LogoutIcon from "../assets/logo/lg1.png";
+import avatarIcon from "../assets/logo/av4.png";
 
 const cookies = new Cookies();
+
+const username = cookies.get("username");
+const avatar = cookies.get("avatarURL");
+
+// console.log(cookies);
 
 const SideBar = ({ logout }) => (
   <div className="channel-list__sidebar">
     <div className="channel-list__sidebar__icon1">
       <a className="icon1__inner" href="#">
-        <img src={HospitalIcon} alt="Hospital" width="42" />
+        <img src={ConnectIcon} alt="CampusConnection" width="30" />
       </a>
     </div>
 
     <div className="channel-list__sidebar__icon1">
-      <a className="icon1__inner" href="http://localhost:3001/shop">
-        <img src={shopIcon} alt="shopIcon" width="41" />
+      <a className="icon1__inner" href="http://localhost:3000/shop">
+        <img src={ShopIcon} alt="shopIcon" width="30" />
+      </a>
+    </div>
+    <div className="channel-list__sidebar__icon1">
+      <a className="icon1__inner" href="http://localhost:3000/service">
+        <img src={ServiceIcon} alt="ServiceIcon" width="30" />
       </a>
     </div>
     <div className="channel-list__sidebar__icon1">
       <a className="icon1__inner" href="http://localhost:4000/">
-        <img src={payIcon} alt="payIcon" width="35" />
+        <img src={PayIcon} alt="payIcon" width="30" />
       </a>
     </div>
-    <div className="channel-list__sidebar__icon2">
+    <div className="channel-list__sidebar__icon1">
       <div className="icon1__inner" onClick={logout}>
-        <img src={LogoutIcon} alt="Logout" width="32" />
+        <img src={LogoutIcon} alt="Logout" width="30" />
       </div>
     </div>
   </div>
 );
 
 const CompanyHeader = () => (
-  <div className="channel-list__header">
-    {/* <div className="channel-list__sidebar__icon3"> */}
-    <div className="icon3__inner">
-      <img src={connect} alt="Logout" width="100" />
+  <>
+    <div className="channel-list__header">
+      <div className="channel-list__sidebar__icon1">
+        <div className="icon3__inner">
+          <img
+            src="https://www.unco.edu/campus-connections/images/unc-campus-connections.png"
+            //src="https://collegian.com/wp-content/uploads/2016/03/302671_CampusConnections-logo.png"
+            alt="Logout"
+            width="100"
+          />
+        </div>
+      </div>
+      {/* code here */}
+      {/* <div className="btn  btn-outline-warning mt-3 ms-5 w-50" href="#">
+        Hi! {username}
+      </div> */}
     </div>
-    {/* </div> */}
-    {/* <img src={connect} alt="Logout" width="100" />
-    <p className="channel-list__header__text">Campus Chat</p> */}
-  </div>
+    <div className="position-relative p-8 ms-4 rounded-2">
+      <div className="d-flex mb-6 align-items-center">
+        {/* <button className="btn  btn-primary mt-4 mb-4 ms-5 me-5"> */}
+        <div className="channel-list__sidebar__icon3">
+          <div className="icon1__inner">
+            {avatar ? (
+              <img src={avatar} alt="Logout" width="30" />
+            ) : (
+              <img src={avatarIcon} alt="Logout" width="30" />
+            )}
+          </div>
+        </div>
+        <span
+          style={{
+            // backgroundColor: "red",
+            color: "whitesmoke",
+            fontSize: 22,
+          }}
+        >
+          {username}...
+        </span>
+        {/* </button> */}
+      </div>
+    </div>
+  </>
 );
 
 const customChannelTeamFilter = (channels) => {
@@ -162,12 +204,12 @@ const ChannelListContainer = ({
       <div
         className="channel-list__container-responsive"
         style={{
-          left: toggleContainer ? "0%" : "-89%",
+          left: toggleContainer ? "0%" : "-88%",
           backgroundColor: "#005fff",
         }}
       >
         <div
-          className="channel-list__container-toggle"
+          className="channerl-list__container-toggle"
           onClick={() =>
             setToggleContainer((prevToggleContainer) => !prevToggleContainer)
           }

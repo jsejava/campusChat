@@ -11,7 +11,7 @@ const app_id = process.env.STREAM_APP_ID;
 
 const signup = async (req, res) => {
   try {
-    const { fullName, username, password, phoneNumber } = req.body;
+    const { username, password } = req.body;
 
     const userId = crypto.randomBytes(16).toString("hex");
 
@@ -21,9 +21,12 @@ const signup = async (req, res) => {
 
     const token = serverClient.createUserToken(userId);
 
-    res
-      .status(200)
-      .json({ token, fullName, username, userId, hashedPassword, phoneNumber });
+    res.status(200).json({
+      token,
+      username,
+      userId,
+      hashedPassword,
+    });
   } catch (error) {
     console.log(error);
 
@@ -50,7 +53,7 @@ const login = async (req, res) => {
     if (success) {
       res.status(200).json({
         token,
-        fullName: users[0].fullName,
+        // fullName: users[0].fullName,
         username,
         userId: users[0].id,
       });

@@ -7,11 +7,11 @@ import signinImage from "../assets/signup.jpg";
 const cookies = new Cookies();
 
 const initialState = {
-  fullName: "",
+  // fullName: "",
   username: "",
   password: "",
-  confirmPassword: "",
-  phoneNumber: "",
+  // confirmPassword: "",
+  // phoneNumber: "",
   avatarURL: "",
 };
 
@@ -26,28 +26,26 @@ const Auth = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const { username, password, phoneNumber, avatarURL } = form;
+    const { username, password, avatarURL } = form;
 
     const URL = "http://localhost:5002/auth";
     // const URL = 'https://medical-pager.herokuapp.com/auth';
 
     const {
-      data: { token, userId, hashedPassword, fullName },
+      data: { token, userId, hashedPassword },
     } = await axios.post(`${URL}/${isSignup ? "signup" : "login"}`, {
       username,
       password,
-      fullName: form.fullName,
-      phoneNumber,
+
       avatarURL,
     });
 
     cookies.set("token", token);
     cookies.set("username", username);
-    cookies.set("fullName", fullName);
+
     cookies.set("userId", userId);
 
     if (isSignup) {
-      cookies.set("phoneNumber", phoneNumber);
       cookies.set("avatarURL", avatarURL);
       cookies.set("hashedPassword", hashedPassword);
     }
@@ -65,7 +63,7 @@ const Auth = () => {
         <div className="auth__form-container_fields-content">
           <p>{isSignup ? "Sign Up" : "Sign In"}</p>
           <form onSubmit={handleSubmit}>
-            {isSignup && (
+            {/* {isSignup && (
               <div className="auth__form-container_fields-content_input">
                 <label htmlFor="fullName">Full Name</label>
                 <input
@@ -76,7 +74,7 @@ const Auth = () => {
                   required
                 />
               </div>
-            )}
+            )} */}
             <div className="auth__form-container_fields-content_input">
               <label htmlFor="username">Username</label>
               <input
@@ -87,7 +85,7 @@ const Auth = () => {
                 required
               />
             </div>
-            {isSignup && (
+            {/* {isSignup && (
               <div className="auth__form-container_fields-content_input">
                 <label htmlFor="phoneNumber">Phone Number</label>
                 <input
@@ -98,7 +96,7 @@ const Auth = () => {
                   required
                 />
               </div>
-            )}
+            )} */}
             {isSignup && (
               <div className="auth__form-container_fields-content_input">
                 <label htmlFor="avatarURL">Avatar URL</label>
@@ -121,7 +119,7 @@ const Auth = () => {
                 required
               />
             </div>
-            {isSignup && (
+            {/* {isSignup && (
               <div className="auth__form-container_fields-content_input">
                 <label htmlFor="confirmPassword">Confirm Password</label>
                 <input
@@ -132,7 +130,7 @@ const Auth = () => {
                   required
                 />
               </div>
-            )}
+            )} */}
             <div className="auth__form-container_fields-content_button">
               <button>{isSignup ? "Sign Up" : "Sign In"}</button>
             </div>
