@@ -86,7 +86,7 @@ const CompanyHeader = () => (
             fontSize: 22,
           }}
         >
-          {username}...
+          {username}
         </span>
         {/* </button> */}
       </div>
