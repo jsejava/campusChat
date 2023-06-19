@@ -35,7 +35,7 @@ const ChannelContainer = ({
   const EmptyState = () => (
     <div className="channel-empty__container">
       <p className="channel-empty__first  text-success">
-        You added a connection
+        Welcome to new campus group
       </p>
       <p className="channel-empty__first">
         <i>This is the beginning of your chat history.</i>

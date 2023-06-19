@@ -13,6 +13,7 @@ import campusIn from "../assets/logo/s1.png";
 import bg1 from "../assets/logo/bg.png";
 import bg2 from "../assets/logo/bg2.png";
 import bg3 from "../assets/logo/bg1.jpeg";
+import Select from "react-select";
 
 const cookies = new Cookies();
 
@@ -22,39 +23,66 @@ const initialState = {
   password: "",
   confirmPassword: "",
   phoneNumber: "",
-  avatarURL: "",
 };
 
 const Auth = () => {
   const [form, setForm] = useState(initialState);
+  const [avatar, setAvatarURL] = useState("");
   const [isSignup, setIsSignup] = useState(true);
 
+  const gender = [
+    {
+      label: (
+        <div className="">
+          <a href="http://localhost:3000/shop">
+            <img src={shop} alt="CampusConnection" width="30" />
+          </a>{" "}
+          <span>basket.....</span>
+        </div>
+      ),
+      value:
+        "https://img.freepik.com/premium-vector/portrait-young-man-with-beard-hair-style-male-avatar-vector-illustration_266660-423.jpg?w=2000",
+    },
+    {
+      label: "Female",
+      value:
+        "https://img.freepik.com/premium-vector/face-cute-girl-avatar-young-girl-portrait-vector-flat-illustration_192760-84.jpg?w=2000",
+    },
+  ];
+
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm({ ...form, [e.target.name]: e.target.value, avatarURL: avatar });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const { username, password, phoneNumber, avatarURL } = form;
-
+    // console.log(form);
+    //console.log(avatarURL);
     const URL = "http://localhost:5002/auth";
     // const URL = 'https://medical-pager.herokuapp.com/auth';
 
     const {
-      data: { token, userId, hashedPassword, fullName },
-    } = await axios.post(`${URL}/${isSignup ? "signup" : "login"}`, {
-      username,
-      password,
-      fullName: form.fullName,
-      phoneNumber,
-      avatarURL,
-    });
+      data: { token, userId, hashedPassword, fullName, image },
+    } = await axios.post(
+      `${URL}/${isSignup ? "signup" : "login"}`,
+      isSignup
+        ? {
+            username,
+            password,
+            fullName: form.fullName,
+            phoneNumber,
+            avatarURL,
+          }
+        : { username, password }
+    );
 
     cookies.set("token", token);
     cookies.set("username", username);
     cookies.set("fullName", fullName);
     cookies.set("userId", userId);
+    cookies.set("avatarURL", image);
 
     if (isSignup) {
       cookies.set("phoneNumber", phoneNumber);
@@ -149,16 +177,37 @@ const Auth = () => {
               </div>
             )}
             {isSignup && (
-              <div className="auth__form-container_fields-content_input">
+              <div className="select-gender">
                 <label htmlFor="avatarURL">Avatar URL</label>
-                <input
-                  name="avatarURL"
-                  type="text"
-                  placeholder="Avatar URL"
-                  onChange={handleChange}
-                  required
+                <Select
+                  styles={{
+                    control: (baseStyles, state) => ({
+                      ...baseStyles,
+                      width: "85%",
+                      bordeRadius: "5px",
+                      color: "#b1b1b1",
+                      fontWeight: "unset",
+                      fontFamily: "Arial, Helvetica, sans-serif",
+                    }),
+                  }}
+                  value={gender.value}
+                  onChange={(value) => setAvatarURL(value.value)}
+                  //onChange={handleChange}
+                  options={gender}
+                  placeholder="Select Avatar"
                 />
               </div>
+
+              // <div className="auth__form-container_fields-content_input">
+              //   <label htmlFor="avatarURL">Avatar URL</label>
+              //   <input
+              //     name="avatarURL"
+              //     type="text"
+              //     placeholder="Avatar URL"
+              //     onChange={handleChange}
+              //     required
+              //   />
+              // </div>
             )}
             <div className="auth__form-container_fields-content_input">
               <label htmlFor="password">Password</label>
