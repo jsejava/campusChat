@@ -2,19 +2,12 @@ import React, { useState } from "react";
 import Cookies from "universal-cookie";
 import axios from "axios";
 import "./Auth.css";
-import ConnectIcon from "../assets/logo/chat.png";
-import signinImage from "../assets/signup.jpg";
-import house from "../assets/house.png";
 import shop from "../assets/logo/shop.png";
 import service from "../assets/logo/service.png";
 import pay from "../assets/logo/pay-5.png";
 import campusUp from "../assets/logo/s2.jpeg";
 import campusIn from "../assets/logo/s1.png";
-import bg1 from "../assets/logo/bg.png";
-import bg2 from "../assets/logo/bg2.png";
-import bg3 from "../assets/logo/bg1.jpeg";
 import Select from "react-select";
-
 const cookies = new Cookies();
 
 const initialState = {
@@ -34,19 +27,98 @@ const Auth = () => {
     {
       label: (
         <div className="">
-          <a href="http://localhost:3000/shop">
-            <img src={shop} alt="CampusConnection" width="30" />
+          <a className="">
+            <img
+              src="https://img.freepik.com/premium-vector/portrait-young-man-with-beard-hair-style-male-avatar-vector-illustration_266660-423.jpg?w=2000"
+              alt="Young man with beard hair"
+              width="30"
+            />
           </a>{" "}
-          <span>basket.....</span>
+          <span>Young man with beard hair</span>
         </div>
       ),
       value:
         "https://img.freepik.com/premium-vector/portrait-young-man-with-beard-hair-style-male-avatar-vector-illustration_266660-423.jpg?w=2000",
     },
     {
-      label: "Female",
+      label: (
+        <div className="">
+          <a className="">
+            <img
+              src="https://img.freepik.com/premium-vector/face-cute-girl-avatar-young-girl-portrait-vector-flat-illustration_192760-84.jpg?w=2000"
+              alt="Young girl cute face"
+              width="30"
+            />
+          </a>{" "}
+          <span>Young girl cute face</span>
+        </div>
+      ),
       value:
         "https://img.freepik.com/premium-vector/face-cute-girl-avatar-young-girl-portrait-vector-flat-illustration_192760-84.jpg?w=2000",
+    },
+    {
+      label: (
+        <div className="">
+          <a className="">
+            <img
+              src="https://static.vecteezy.com/system/resources/previews/007/043/161/non_2x/male-avatar-smiling-portrait-of-a-cheerful-young-man-with-a-happy-smile-vector.jpg"
+              alt="Young man with beard hair"
+              width="25"
+            />
+          </a>{" "}
+          <span>Young man with a happy smile</span>
+        </div>
+      ),
+      value:
+        "https://static.vecteezy.com/system/resources/previews/007/043/161/non_2x/male-avatar-smiling-portrait-of-a-cheerful-young-man-with-a-happy-smile-vector.jpg",
+    },
+    {
+      label: (
+        <div className="">
+          <a className="">
+            <img
+              src="https://www.shutterstock.com/image-illustration/cute-girl-illustration-beautiful-face-260nw-1281482992.jpg"
+              alt="Young girl cute face"
+              width="30"
+            />
+          </a>{" "}
+          <span>Cute girl with beautiful face</span>
+        </div>
+      ),
+      value:
+        "https://www.shutterstock.com/image-illustration/cute-girl-illustration-beautiful-face-260nw-1281482992.jpg",
+    },
+    {
+      label: (
+        <div className="">
+          <a className="">
+            <img
+              src="https://img.freepik.com/premium-vector/avatar-man-with-glasses-portrait-young-guy-vector-illustration-face_217290-1809.jpg?w=2000"
+              alt="Young man with beard hair"
+              width="35"
+            />
+          </a>{" "}
+          <span>Young man with glasses</span>
+        </div>
+      ),
+      value:
+        "https://img.freepik.com/premium-vector/avatar-man-with-glasses-portrait-young-guy-vector-illustration-face_217290-1809.jpg?w=2000",
+    },
+    {
+      label: (
+        <div className="">
+          <a className="">
+            <img
+              src="https://media.istockphoto.com/id/1227320122/vector/cute-vector-girl-avatar-icon-pretty-lady-portrait.jpg?s=170x170&k=20&c=ybBo21zyd0FJ6dQKg391r39yZef3wY1Y3lZjV-3cjh8="
+              alt="Young girl cute face"
+              width="30"
+            />
+          </a>{" "}
+          <span>Pretty lady with glasses</span>
+        </div>
+      ),
+      value:
+        "https://media.istockphoto.com/id/1227320122/vector/cute-vector-girl-avatar-icon-pretty-lady-portrait.jpg?s=170x170&k=20&c=ybBo21zyd0FJ6dQKg391r39yZef3wY1Y3lZjV-3cjh8=",
     },
   ];
 
@@ -58,39 +130,42 @@ const Auth = () => {
     e.preventDefault();
 
     const { username, password, phoneNumber, avatarURL } = form;
-    // console.log(form);
-    //console.log(avatarURL);
+
     const URL = "http://localhost:5002/auth";
     // const URL = 'https://medical-pager.herokuapp.com/auth';
 
-    const {
-      data: { token, userId, hashedPassword, fullName, image },
-    } = await axios.post(
-      `${URL}/${isSignup ? "signup" : "login"}`,
-      isSignup
-        ? {
-            username,
-            password,
-            fullName: form.fullName,
-            phoneNumber,
-            avatarURL,
-          }
-        : { username, password }
-    );
+    try {
+      const {
+        data: { token, userId, hashedPassword, fullName, image },
+      } = await axios.post(
+        `${URL}/${isSignup ? "signup" : "login"}`,
+        isSignup
+          ? {
+              username,
+              password,
+              fullName: form.fullName,
+              phoneNumber,
+              avatarURL,
+            }
+          : { username, password }
+      );
 
-    cookies.set("token", token);
-    cookies.set("username", username);
-    cookies.set("fullName", fullName);
-    cookies.set("userId", userId);
-    cookies.set("avatarURL", image);
+      cookies.set("token", token);
+      cookies.set("username", username);
+      cookies.set("fullName", fullName);
+      cookies.set("userId", userId);
+      cookies.set("avatarURL", image);
 
-    if (isSignup) {
-      cookies.set("phoneNumber", phoneNumber);
-      cookies.set("avatarURL", avatarURL);
-      cookies.set("hashedPassword", hashedPassword);
+      if (isSignup) {
+        cookies.set("phoneNumber", phoneNumber);
+        cookies.set("avatarURL", avatarURL);
+        cookies.set("hashedPassword", hashedPassword);
+      }
+
+      window.location.reload();
+    } catch (error) {
+      return window.alert(error?.response?.data.message);
     }
-
-    window.location.reload();
   };
 
   const switchMode = () => {
@@ -127,8 +202,6 @@ const Auth = () => {
                 justifyContent: "center",
                 alignItems: "center",
                 marginTop: "20px",
-                // flexDirection: "row",
-                // marginTop: "40px",
               }}
             >
               {isSignup ? (
@@ -178,7 +251,7 @@ const Auth = () => {
             )}
             {isSignup && (
               <div className="select-gender">
-                <label htmlFor="avatarURL">Avatar URL</label>
+                <label htmlFor="avatarURL">Avatar</label>
                 <Select
                   styles={{
                     control: (baseStyles, state) => ({

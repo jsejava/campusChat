@@ -470,6 +470,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 }
 
 /* .channel-list__sidebar__icon2 {

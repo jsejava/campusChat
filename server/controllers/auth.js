@@ -38,38 +38,37 @@ const signup = async (req, res) => {
 };
 
 const login = async (req, res) => {
+  const { username, password } = req.body;
+
+  const serverClient = connect(api_key, api_secret, app_id);
+
+  const client = StreamChat.getInstance(api_key, api_secret);
+  let user;
   try {
-    const { username, password } = req.body;
-
-    const serverClient = connect(api_key, api_secret, app_id);
-    const client = StreamChat.getInstance(api_key, api_secret);
-    console.log("serverClient ============>", serverClient);
-    console.log("client ============>", client);
-    const { users } = await client.queryUsers({ name: username });
-    console.log("users ============>", users);
-    if (!users.length)
-      return res.status(400).json({ message: "User not found" });
-
-    const success = await bcrypt.compare(password, users[0].hashedPassword);
-    console.log("success ============>", success);
-    const token = serverClient.createUserToken(users[0].id);
-
-    if (success) {
-      //console.log();
-      res.status(200).json({
-        token,
-        fullName: users[0].fullName,
-        username,
-        userId: users[0].id,
-        image: users[0].image,
-      });
-    } else {
-      res.status(500).json({ message: "Incorrect password" });
-    }
+    user = await client.queryUsers({ name: username });
   } catch (error) {
-    res.status(500).json({ message: error });
     console.log(error);
-    //throw new Error("rejected!!!!!!!");
+  }
+  if (!user) return res.status(500).json({ message: "network problem" });
+
+  const { users } = user;
+
+  if (!users.length) return res.status(500).json({ message: "User not found" });
+
+  const success = await bcrypt.compare(password, users[0].hashedPassword);
+
+  const token = serverClient.createUserToken(users[0].id);
+
+  if (success) {
+    res.status(200).json({
+      token,
+      fullName: users[0].fullName,
+      username,
+      userId: users[0].id,
+      image: users[0].image,
+    });
+  } else {
+    res.status(500).json({ message: "Incorrect password" });
   }
 };
 
