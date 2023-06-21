@@ -12,6 +12,14 @@ const app_id = process.env.STREAM_APP_ID;
 const signup = async (req, res) => {
   try {
     const { fullName, username, password, phoneNumber, avatarURL } = req.body;
+    if (
+      fullName.trim().length === 0 ||
+      username.trim().length === 0 ||
+      password.trim().length === 0 ||
+      phoneNumber.trim().length === 0
+      // || avatarURL.length === 0
+    )
+      return res.status(500).json({ message: "Please Fill All Field" });
 
     const userId = crypto.randomBytes(16).toString("hex");
 
@@ -20,6 +28,10 @@ const signup = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const token = serverClient.createUserToken(userId);
+
+    //console.log(userId);
+
+    console.log(token);
 
     res.status(200).json({
       token,
@@ -31,9 +43,9 @@ const signup = async (req, res) => {
       avatarURL,
     });
   } catch (error) {
-    console.log(error);
+    //console.log(error);
 
-    res.status(500).json({ message: error });
+    res.status(500).json({ message: "network problem" });
   }
 };
 
@@ -73,3 +85,17 @@ const login = async (req, res) => {
 };
 
 module.exports = { signup, login };
+
+// {
+//   console.log("empty");
+// } else {
+//   console.log(fullName, username, password, phoneNumber, avatarURL);
+// }
+// console.log(
+//   "reg:",
+//   fullName.length,
+//   username,
+//   password,
+//   phoneNumber,
+//   avatarURL
+// );

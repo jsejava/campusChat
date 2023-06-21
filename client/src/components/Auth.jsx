@@ -8,6 +8,11 @@ import pay from "../assets/logo/pay-5.png";
 import campusUp from "../assets/logo/s2.jpeg";
 import campusIn from "../assets/logo/s1.png";
 import Select from "react-select";
+
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+
+const MySwal = withReactContent(Swal);
 const cookies = new Cookies();
 
 const initialState = {
@@ -22,6 +27,7 @@ const Auth = () => {
   const [form, setForm] = useState(initialState);
   const [avatar, setAvatarURL] = useState("");
   const [isSignup, setIsSignup] = useState(true);
+  const [error, setError] = useState(false);
 
   const gender = [
     {
@@ -126,14 +132,30 @@ const Auth = () => {
     setForm({ ...form, [e.target.name]: e.target.value, avatarURL: avatar });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const signinFunc = () => {
+    if (
+      form.username.trim().length === 0 ||
+      form.password.trim().length === 0
+    ) {
+      return setError(true);
+    } else ipcall();
+  };
+  const signupFunc = () => {
+    if (
+      form.fullName.trim().length === 0 ||
+      form.username.trim().length === 0 ||
+      form.password.trim().length === 0 ||
+      form.phoneNumber.trim().length === 0 ||
+      form.avatarURL.length === 0 ||
+      form.password !== form.confirmPassword
+    ) {
+      return setError(true);
+    } else ipcall();
+  };
 
-    const { username, password, phoneNumber, avatarURL } = form;
-
+  const ipcall = async () => {
     const URL = "http://localhost:5002/auth";
-    // const URL = 'https://medical-pager.herokuapp.com/auth';
-
+    const { username, password, phoneNumber, avatarURL } = form;
     try {
       const {
         data: { token, userId, hashedPassword, fullName, image },
@@ -164,8 +186,42 @@ const Auth = () => {
 
       window.location.reload();
     } catch (error) {
-      return window.alert(error?.response?.data.message);
+      console.log(error);
+      let timerInterval;
+      return Swal.fire({
+        title: error?.response?.data.message,
+        width: 500,
+        color: "#716add",
+        backdrop: `rgba(0,0,123,0.4)`,
+        html: "<b>Please try again</b>",
+        timer: 2000,
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+          const b = Swal.getHtmlContainer().querySelector("b");
+          timerInterval = setInterval(() => {
+            // b.textContent = Swal.getTimerLeft();
+          }, 100);
+        },
+        willClose: () => {
+          clearInterval(timerInterval);
+        },
+      }).then((result) => {
+        if (result.dismiss === Swal.DismissReason.timer) {
+          // console.log("I was closed by the timer");
+        }
+      });
     }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    isSignup ? signupFunc() : signinFunc();
+
+    // if (form.password !== form.confirmPassword) return setPasserror(true);
+
+    // const URL = 'https://medical-pager.herokuapp.com/auth';
   };
 
   const switchMode = () => {
@@ -216,16 +272,23 @@ const Auth = () => {
 
           <form onSubmit={handleSubmit}>
             {isSignup && (
-              <div className="auth__form-container_fields-content_input">
-                <label htmlFor="fullName">Full Name</label>
-                <input
-                  name="fullName"
-                  type="text"
-                  placeholder="Full Name"
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+              <>
+                <div className="auth__form-container_fields-content_input">
+                  <label htmlFor="fullName">Full Name</label>
+                  <input
+                    name="fullName"
+                    type="text"
+                    placeholder="Full Name"
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                {error && form.fullName.trim().length <= 0 ? (
+                  <label style={{ color: "red" }}>
+                    fullName can't be Empty
+                  </label>
+                ) : null}
+              </>
             )}
             <div className="auth__form-container_fields-content_input">
               <label htmlFor="username">Username</label>
@@ -237,39 +300,56 @@ const Auth = () => {
                 required
               />
             </div>
+            {error && form.username.trim().length <= 0 ? (
+              <label style={{ color: "red" }}>username can't be Empty</label>
+            ) : null}
             {isSignup && (
-              <div className="auth__form-container_fields-content_input">
-                <label htmlFor="phoneNumber">Phone Number</label>
-                <input
-                  name="phoneNumber"
-                  type="text"
-                  placeholder="Phone Number"
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+              <>
+                <div className="auth__form-container_fields-content_input">
+                  <label htmlFor="phoneNumber">Phone Number</label>
+                  <input
+                    name="phoneNumber"
+                    type="text"
+                    placeholder="Phone Number"
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                {error && form.phoneNumber.trim().length <= 0 ? (
+                  <label style={{ color: "red" }}>
+                    phoneNumber can't be Empty
+                  </label>
+                ) : null}
+              </>
             )}
             {isSignup && (
-              <div className="select-gender">
-                <label htmlFor="avatarURL">Avatar</label>
-                <Select
-                  styles={{
-                    control: (baseStyles, state) => ({
-                      ...baseStyles,
-                      width: "85%",
-                      bordeRadius: "5px",
-                      color: "#b1b1b1",
-                      fontWeight: "unset",
-                      fontFamily: "Arial, Helvetica, sans-serif",
-                    }),
-                  }}
-                  value={gender.value}
-                  onChange={(value) => setAvatarURL(value.value)}
-                  //onChange={handleChange}
-                  options={gender}
-                  placeholder="Select Avatar"
-                />
-              </div>
+              <>
+                <div className="select-gender">
+                  <label htmlFor="avatarURL">
+                    Avatar <i style={{ color: "red" }}>(optional)</i>
+                  </label>
+                  <Select
+                    styles={{
+                      control: (baseStyles, state) => ({
+                        ...baseStyles,
+                        width: "85%",
+                        bordeRadius: "5px",
+                        color: "#b1b1b1",
+                        fontWeight: "unset",
+                        fontFamily: "Arial, Helvetica, sans-serif",
+                      }),
+                    }}
+                    value={gender.value}
+                    onChange={(value) => setAvatarURL(value.value)}
+                    //onChange={handleChange}
+                    options={gender}
+                    placeholder="Select Avatar"
+                  />
+                </div>
+                {/* {error && form.avatarURL.trim().length <= 0 ? (
+                  <label style={{ color: "red" }}>Pls select an Avatar</label>
+                ) : null} */}
+              </>
 
               // <div className="auth__form-container_fields-content_input">
               //   <label htmlFor="avatarURL">Avatar URL</label>
@@ -292,21 +372,36 @@ const Auth = () => {
                 required
               />
             </div>
+            {error && form.password.trim().length <= 0 ? (
+              <label style={{ color: "red" }}>Password can't be Empty</label>
+            ) : null}
             {isSignup && (
-              <div className="auth__form-container_fields-content_input">
-                <label htmlFor="confirmPassword">Confirm Password</label>
-                <input
-                  name="confirmPassword"
-                  type="password"
-                  placeholder="Confirm Password"
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+              <>
+                <div className="auth__form-container_fields-content_input">
+                  <label htmlFor="confirmPassword">Confirm Password</label>
+                  <input
+                    name="confirmPassword"
+                    type="password"
+                    placeholder="Confirm Password"
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                {/* {error && form.confirmPassword.trim().length <= 0 ? (
+                  <label style={{ color: "red" }}>
+                    confirmPassword can't be Empty
+                  </label>
+                ) : null} */}
+                {error && form.password !== form.confirmPassword ? (
+                  <label style={{ color: "red" }}>
+                    Password does not match
+                  </label>
+                ) : null}
+              </>
             )}
             {/* <div className="auth__form-container_fields-content_button"> */}
             <div>
-              <button className="btn btn-outline-warning  text-success">
+              <button className="btn btn-outline-warning text-success">
                 <b>{isSignup ? "Register" : "Login"}</b>
               </button>
             </div>
