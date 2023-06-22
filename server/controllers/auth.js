@@ -11,12 +11,14 @@ const app_id = process.env.STREAM_APP_ID;
 
 const signup = async (req, res) => {
   try {
-    const { fullName, username, password, phoneNumber, avatarURL } = req.body;
+    //  phoneNumber,
+    const { fullName, username, password, avatarURL } = req.body;
     if (
       fullName.trim().length === 0 ||
       username.trim().length === 0 ||
-      password.trim().length === 0 ||
-      phoneNumber.trim().length === 0
+      password.trim().length === 0
+
+      // || phoneNumber.trim().length === 0
       // || avatarURL.length === 0
     )
       return res.status(500).json({ message: "Please Fill All Field" });
@@ -26,12 +28,13 @@ const signup = async (req, res) => {
     const serverClient = connect(api_key, api_secret, app_id);
 
     const hashedPassword = await bcrypt.hash(password, 10);
+    console.log(serverClient);
 
     const token = serverClient.createUserToken(userId);
 
     //console.log(userId);
 
-    console.log(token);
+    // console.log(token);
 
     res.status(200).json({
       token,
@@ -39,7 +42,7 @@ const signup = async (req, res) => {
       username,
       userId,
       hashedPassword,
-      phoneNumber,
+      // phoneNumber,
       avatarURL,
     });
   } catch (error) {

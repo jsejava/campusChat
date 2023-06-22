@@ -20,7 +20,7 @@ const initialState = {
   username: "",
   password: "",
   confirmPassword: "",
-  phoneNumber: "",
+  //phoneNumber: "",
 };
 
 const Auth = () => {
@@ -145,8 +145,8 @@ const Auth = () => {
       form.fullName.trim().length === 0 ||
       form.username.trim().length === 0 ||
       form.password.trim().length === 0 ||
-      form.phoneNumber.trim().length === 0 ||
-      form.avatarURL.length === 0 ||
+      //form.phoneNumber.trim().length === 0 ||
+      // form.avatarURL.length === 0 ||
       form.password !== form.confirmPassword
     ) {
       return setError(true);
@@ -155,7 +155,8 @@ const Auth = () => {
 
   const ipcall = async () => {
     const URL = "http://localhost:5002/auth";
-    const { username, password, phoneNumber, avatarURL } = form;
+    //phoneNumber
+    const { username, password, avatarURL } = form;
     try {
       const {
         data: { token, userId, hashedPassword, fullName, image },
@@ -166,7 +167,7 @@ const Auth = () => {
               username,
               password,
               fullName: form.fullName,
-              phoneNumber,
+              // phoneNumber,
               avatarURL,
             }
           : { username, password }
@@ -179,7 +180,7 @@ const Auth = () => {
       cookies.set("avatarURL", image);
 
       if (isSignup) {
-        cookies.set("phoneNumber", phoneNumber);
+        //cookies.set("phoneNumber", phoneNumber);
         cookies.set("avatarURL", avatarURL);
         cookies.set("hashedPassword", hashedPassword);
       }
@@ -305,13 +306,14 @@ const Auth = () => {
             ) : null}
             {isSignup && (
               <>
-                <div className="auth__form-container_fields-content_input">
+                {/* <div className="auth__form-container_fields-content_input">
                   <label htmlFor="phoneNumber">Phone Number</label>
                   <input
                     name="phoneNumber"
-                    type="text"
+                    type="tel"
                     placeholder="Phone Number"
                     onChange={handleChange}
+                    pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
                     required
                   />
                 </div>
@@ -319,7 +321,7 @@ const Auth = () => {
                   <label style={{ color: "red" }}>
                     phoneNumber can't be Empty
                   </label>
-                ) : null}
+                ) : null} */}
               </>
             )}
             {isSignup && (
