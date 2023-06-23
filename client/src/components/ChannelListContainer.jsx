@@ -10,6 +10,9 @@ import ServiceIcon from "../assets/logo/service.png";
 import PayIcon from "../assets/logo/pay-5.png";
 import LogoutIcon from "../assets/logo/lg1.png";
 import avatarIcon from "../assets/logo/av4.png";
+import shopUrl from "../appUrl/shopUrl";
+import serviceUrl from "../appUrl/serviceUrl";
+import payUrl from "../appUrl/payUrl";
 
 const cookies = new Cookies();
 
@@ -27,17 +30,17 @@ const SideBar = ({ logout }) => (
     </div>
 
     <div className="channel-list__sidebar__icon1">
-      <a className="icon1__inner" href="http://localhost:3000/shop">
+      <a className="icon1__inner" href={shopUrl}>
         <img src={ShopIcon} alt="shopIcon" width="30" />
       </a>
     </div>
     <div className="channel-list__sidebar__icon1">
-      <a className="icon1__inner" href="http://localhost:3000/service">
+      <a className="icon1__inner" href={serviceUrl}>
         <img src={ServiceIcon} alt="ServiceIcon" width="30" />
       </a>
     </div>
     <div className="channel-list__sidebar__icon1">
-      <a className="icon1__inner" href="http://localhost:4000/">
+      <a className="icon1__inner" href={payUrl}>
         <img src={PayIcon} alt="payIcon" width="30" />
       </a>
     </div>
@@ -75,7 +78,11 @@ const CompanyHeader = () => (
             {avatar ? (
               <img src={avatar} alt="Logout" width="30" />
             ) : (
-              <img src={avatarIcon} alt="Logout" width="30" />
+              <img
+                src="https://cdn2.iconfinder.com/data/icons/danger-problems-2/512/xxx003-1024.png"
+                alt="Logout"
+                width="30"
+              />
             )}
           </div>
         </div>

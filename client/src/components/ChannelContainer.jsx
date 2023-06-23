@@ -2,7 +2,6 @@ import React from "react";
 import { Channel, MessageTeam } from "stream-chat-react";
 import { ChannelInner, CreateChannel, EditChannel } from "./";
 import Cookies from "universal-cookie";
-import avatarIcon from "../assets/logo/av4.png";
 
 const cookies = new Cookies();
 const username = cookies.get("username");
@@ -56,7 +55,11 @@ const ChannelContainer = ({
               {avatar ? (
                 <img src={avatar} alt="Logout" width="30" />
               ) : (
-                <img src={avatarIcon} alt="Logout" width="30" />
+                <img
+                  src="https://cdn2.iconfinder.com/data/icons/danger-problems-2/512/xxx003-1024.png"
+                  alt="Logout"
+                  width="30"
+                />
               )}
             </div>
           </div>

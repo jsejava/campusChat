@@ -1025,7 +1025,7 @@ body {
 }
 
 .team-channel-list__header svg {
-  cursor: progress;
+  cursor: pointer;
   margin-bottom: 25px;
   margin-top: 10px;
 }

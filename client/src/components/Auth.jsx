@@ -8,9 +8,11 @@ import pay from "../assets/logo/pay-5.png";
 import campusUp from "../assets/logo/s2.jpeg";
 import campusIn from "../assets/logo/s1.png";
 import Select from "react-select";
-
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import shopUrl from "../appUrl/shopUrl";
+import serviceUrl from "../appUrl/serviceUrl";
+import payUrl from "../appUrl/payUrl";
 
 const MySwal = withReactContent(Swal);
 const cookies = new Cookies();
@@ -235,17 +237,18 @@ const Auth = () => {
         <div className="auth__form-container_fields-content">
           <div className="row align-items-center">
             <div className="col-4 col-md-4 col-lg-4 col-xl-4 text-center">
-              <a href="http://localhost:3000/shop">
+              {/* <a href="http://localhost:3000/shop"> */}
+              <a href={shopUrl}>
                 <img src={shop} alt="CampusConnection" width="30" />
               </a>
             </div>
             <div className="col-4 col-md-4 col-lg-4 col-xl-4 text-center">
-              <a href="http://localhost:3000/service">
+              <a href={serviceUrl}>
                 <img src={service} alt="CampusConnection" width="30" />
               </a>
             </div>
             <div className="col-4 col-md-4 col-lg-4 col-xl-4 text-center">
-              <a href="http://localhost:4000">
+              <a href={payUrl}>
                 <img src={pay} alt="CampusConnection" width="30" />
               </a>
             </div>
