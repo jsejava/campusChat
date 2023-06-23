@@ -156,7 +156,8 @@ const Auth = () => {
   };
 
   const ipcall = async () => {
-    const URL = "http://localhost:5002/auth";
+    // const URL = "http://localhost:5002/auth";
+    const URL = "https://campus-connection-7757ba803b59.herokuapp.com/auth";
     //phoneNumber
     const { username, password, avatarURL } = form;
     try {
